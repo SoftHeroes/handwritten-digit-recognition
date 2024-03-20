@@ -11,9 +11,9 @@ $(document).ready(function () {
     var value = document.getElementById("value");
     var ctx = canvas.getContext('2d');
     var linesArray = [];
-    currentSize = 5;
-    var currentColor = "rgb(200,20,100)";
-    var currentBg = "white";
+    currentSize = 32;
+    var currentColor = "white";
+    var currentBg = "black";
 
     // INITIAL LAUNCH
 
