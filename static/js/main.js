@@ -4,6 +4,11 @@ $(document).ready(function () {
     var isMouseDown = false;
     var canvas = document.createElement('canvas');
     var body = document.getElementsByTagName("body")[0];
+    var canvas_holder = document.getElementById("canvas-holder");
+    var predict = document.getElementById("predict");
+    var colorPicker = document.getElementById('colorpicker');
+    var controlSize = document.getElementById("controlSize");
+    var value = document.getElementById("value");
     var ctx = canvas.getContext('2d');
     var linesArray = [];
     currentSize = 5;
@@ -37,6 +42,7 @@ $(document).ready(function () {
         downloadCanvas(this, 'canvas', 'masterpiece.png');
     }, false);
     document.getElementById('eraser').addEventListener('click', eraser);
+    document.getElementById('pencil').addEventListener('click', pencil);
     document.getElementById('clear').addEventListener('click', createCanvas);
     document.getElementById('save').addEventListener('click', save);
     document.getElementById('load').addEventListener('click', load);
@@ -77,7 +83,7 @@ $(document).ready(function () {
         canvas.style.border = "1px solid";
         ctx.fillStyle = currentBg;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        body.appendChild(canvas);
+        canvas_holder.appendChild(canvas);
     }
 
     // DOWNLOAD CANVAS
@@ -122,6 +128,10 @@ $(document).ready(function () {
     function eraser() {
         currentSize = 50;
         currentColor = ctx.fillStyle
+    }
+    function pencil() {
+        currentSize = controlSize.value;
+        currentColor = colorPicker.value;
     }
 
     // GET MOUSE POSITION
@@ -175,7 +185,31 @@ $(document).ready(function () {
     // ON MOUSE UP
 
     function mouseup() {
-        isMouseDown = false
-        store()
+        isMouseDown = false;
+        store();
+        sendCanvasDataToAPI();
+    }
+
+    const apiEndpointUrl = 'http://127.0.0.1:5000/predict';
+
+    function sendCanvasDataToAPI() {
+        const canvasData = canvas.toDataURL('image/png'); // Get canvas data as a PNG image data URL
+
+        fetch(apiEndpointUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ image: canvasData })
+        })
+            .then(response => response.json())
+            .then(data => {
+                predict
+                predict.classList.remove('hide');
+                value.textContent = data.predicted;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     }
 });

@@ -16,7 +16,7 @@ div#sidebar {
 }
 
 canvas#canvas {
-    left: 150px;
+    left: 50px;
     top: 45px;
 }
 
@@ -24,6 +24,7 @@ canvas#canvas {
     margin-bottom: 10px;
     width: 100%;
 }
+
 input {
     width: 100%;
     margin-bottom: 10px;
@@ -44,4 +45,10 @@ input {
 .colorpicker {
     background: transparent;
     height: 40px;
+}
+
+#predict {
+    left: 292px !important;
+    display: block;
+    position: relative;
 }
